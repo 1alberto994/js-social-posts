@@ -58,11 +58,11 @@ const posts = [
 const manyPost=document.querySelector(".posts-list")
 for(let i=0;i<posts.length;i++){
     
-    manyPost.innerHTML+=` <div id="${posts[i].id}" class="post" >
+    manyPost.innerHTML+=` <div  class="post" >
     <div class="post__header">
         <div class="post-meta">                    
             <div class="post-meta__icon">
-                <img class="profile-pic" src="${posts[i].media}" alt="Phil Mangione">                    
+                <img class="profile-pic" src="${posts[i].author["image"]}" alt="${posts[i].author["name"]}">                    
             </div>
             <div class="post-meta__data">
                 <div class="post-meta__author">"${posts[i].author["name"]}"</div>
@@ -72,18 +72,18 @@ for(let i=0;i<posts.length;i++){
     </div>
     <div class="post__text">"${posts[i].content}".</div>
     <div class="post__image">
-        <img src="${posts[i].author["image"]}" alt="">
+        <img src="${posts[i].media}" alt="">
     </div>
     <div class="post__footer">
         <div class="likes js-likes">
             <div class="likes__cta">
-                <a class="like-button  js-like-button" href="#" data-postid="1">
+                <a class="like-button  js-like-button" href="#" data-postid="${posts[i].id}">
                     <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                     <span class="like-button__label">Mi Piace</span>
                 </a>
             </div>
             <div class="likes__counter">
-                Piace a <b id="like-counter-1" class="js-likes-counter">"${posts[i].likes}"</b> persone
+                Piace a <b id="like-counter-${posts[i].id}" class="js-likes-counter">"${posts[i].likes}"</b> persone
             </div>
         </div> 
     </div>            
@@ -91,10 +91,24 @@ for(let i=0;i<posts.length;i++){
 
 </div>`
 };
-let newLike=${posts[i]}
-const likes=document.querySelector(".like-button__label");
-likes.addEventListener("click",
-    function(){
+let newLike=document.querySelectorAll(".js-like-button");
+newLike.forEach((button,i)=>{
+    button.addEventListener("click",
+        function(event){
+            
+                event.preventDefault();
+                console.log(this)
+                this.classList.add("like-button--liked");
+                const identity=this.getAttribute("data-postid");
+                const counter=document.getElementById("like-counter-"+identity);
+                let likes=parseInt(counter.innerText);
+                 likes=likes+1;
+                 counter.innerHTML=likes
+            
+           
+        }
+    )
 
-    }
-)
+})
+
+
